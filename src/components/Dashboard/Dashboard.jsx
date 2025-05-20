@@ -4,7 +4,7 @@ const Dashboard = () => {
  
   return (
     <div className="p-2 min-h-screen">
-      Home page
+      manystack Fibree 
     </div>
   );
 };
