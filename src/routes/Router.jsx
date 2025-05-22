@@ -10,15 +10,15 @@ import Profile from "../page/Settings/Profile";
 import TermsCondition from "../page/Settings/TermsCondition";
 import FAQ from "../page/Settings/FAQ";
 import PrivacyPolicy from "../page/Settings/PrivacyPolicy";
-import Categories from "../page/CategoriesManagement/Categories";
-import Subcategory from "../page/CategoriesManagement/Subcategory";
 
 import ForgetPass from "../Auth/ForgetPass";
 import Verify from "../Auth/Verify";
 import ResetPass from "../Auth/ResetPass";
 import Notification from "../page/Notification/Notification";
-import About from "../page/Settings/About";
+
 import Login from "../Auth/Login";
+import Category from "../page/category/Category";
+import Admin from "../page/admin/Admin";
 
 
 export const router = createBrowserRouter([
@@ -42,17 +42,15 @@ export const router = createBrowserRouter([
         path: "/dashboard/CreatorManagement",
         element: <CreatorManagement></CreatorManagement>,
       },
-      {
-        path: "/dashboard/CategoriesManagement/Categories",
-        element: <Categories></Categories>,
+      
+   {
+        path: "/dashboard/category",
+        element:<Category></Category>
       },
+
       {
-        path: "/dashboard/CategoriesManagement/Categories",
-        element: <Categories></Categories>,
-      },
-      {
-        path: "/dashboard/CategoriesManagement/Subcategory",
-        element: <Subcategory></Subcategory>,
+        path: "/dashboard/admin",
+        element:<Admin></Admin>
       },
       {
         path: "/dashboard/Subscription",
@@ -75,13 +73,10 @@ export const router = createBrowserRouter([
         element: <TermsCondition></TermsCondition>,
       },
       {
-        path: "/dashboard/Settings/FAQ",
+        path: "/dashboard/Settings/contact",
         element: <FAQ></FAQ>,
       },
-      {
-        path: "/dashboard/Settings/aboutUs",
-        element: <About></About>,
-      },
+     
       {
         path: "/dashboard/Settings/PrivacyPolicy",
         element: <PrivacyPolicy></PrivacyPolicy>,

@@ -4,7 +4,7 @@ import create from "../../assets/routerImg/create.png";
 import settings from "../../assets/routerImg/settings.png";
 import subscription from "../../assets/routerImg/subscription.png";
 import user from "../../assets/routerImg/user.png";
-import logo from "../../assets/header/logo.png";
+import logo from "../../assets/header/logo1.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
@@ -25,32 +25,43 @@ const items = [
     icon: user,
     link: "/dashboard/UserManagement",
   },
-
-  
-  
-  {
-    key: "categoriesManagement",
-    label: "Categories Management",
-    icon: categorie,
-    link: "/dashboard/CategoriesManagement/Categories",
-    children: [
-      {
-        key: "categories",
-        label: "Categories",
-        link: "/dashboard/CategoriesManagement/Categories",
-      },
-      {
-        key: "subcategory",
-        label: "Subcategory",
-        link: "/dashboard/CategoriesManagement/Subcategory",
-      },
-    ],
+{
+    key: "category",
+    label: "Category",
+    icon: user,
+    link: "/dashboard/category",
   },
+  
+  
+  // {
+  //   key: "categoriesManagement",
+  //   label: "Categories Management",
+  //   icon: categorie,
+  //   link: "/dashboard/CategoriesManagement/Categories",
+  //   children: [
+  //     {
+  //       key: "categories",
+  //       label: "Categories",
+  //       link: "/dashboard/CategoriesManagement/Categories",
+  //     },
+  //     {
+  //       key: "subcategory",
+  //       label: "Subcategory",
+  //       link: "/dashboard/CategoriesManagement/Subcategory",
+  //     },
+  //   ],
+  // },
   {
     key: "subscription",
     label: "Subscription",
     icon: subscription,
     link: "/dashboard/Subscription",
+  },
+   {
+    key: "admin",
+    label: "Admin",
+    icon: subscription,
+    link: "/dashboard/admin",
   },
   {
     key: "settings",
@@ -74,15 +85,11 @@ const items = [
         link: "/dashboard/Settings/PrivacyPolicy",
       },
       {
-        key: "faq",
-        label: "FAQ",
-        link: "/dashboard/Settings/FAQ",
+        key: "Contact",
+        label: "Contact Us",
+        link: "/dashboard/Settings/contact",
       },
-      {
-        key: "about",
-        label: "About Us",
-        link: "/dashboard/Settings/aboutUs",
-      },
+     
     ],
   },
 ];
@@ -140,10 +147,10 @@ const SidBar = () => {
   return (
     <div className="custom-sidebar h-[100vh] bg-white">
       
-      <div className="custom-sidebar-logo flex justify-center">
-        <img src={logo} alt="Logo" className="w-[160px]" />
+      <div className="custom-sidebar-logo flex justify-start pt-3 pl-5">
+        <img src={logo} alt="Logo" className="w-[55px]" />
       </div>
-      <div className="menu-items">
+      <div className="menu-items pt-7">
         {items.map((item) => {
           const isSettingsActive =
             item.key === "settings" &&
@@ -163,7 +170,7 @@ const SidBar = () => {
                 to={item.link}
                 className={`menu-item my-4 mx-5 py-3 px-3 flex items-center cursor-pointer ${
                   selectedKey === item.key || isSettingsActive || isCreatorActive || isCategoriesActive
-                    ? "bg-[#bb3538] text-white rounded-md"
+                    ? "bg-[#017FF4] text-white rounded-md"
                     : "bg-white rounded-md hover:bg-gray-200"
                 }`}
                 onClick={(e) => {
@@ -207,7 +214,7 @@ const SidBar = () => {
                       to={child.link}
                       className={`menu-item p-4 flex items-center cursor-pointer ${
                         selectedKey === child.key
-                          ? "bg-[#bb3538] text-white"
+                          ? "bg-[#017FF4] text-white"
                           : "hover:bg-gray-200"
                       }`}
                       onClick={() => {
@@ -229,7 +236,7 @@ const SidBar = () => {
       <div className="  w-full p-4 px-5">
         <button
           onClick={handleLogout}
-          className="w-full flex bg-[#fa16ef] text-white text-start rounded-md  p-3"
+          className="w-full flex bg-blue-50 text-black text-start rounded-md  p-3"
         >
           <span className="text-2xl">
             <IoIosLogIn />
