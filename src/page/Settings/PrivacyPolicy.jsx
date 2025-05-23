@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
       'align'
     ]
   }
-//sdfsdf
+//sdfsd
   return (
     <div className=" mx-auto ">
       <div className="flex justify-between">
