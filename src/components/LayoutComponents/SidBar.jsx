@@ -1,9 +1,4 @@
-import dashboard from "../../assets/routerImg/dashboard.png";
-import categorie from "../../assets/routerImg/categorie.png";
-import create from "../../assets/routerImg/create.png";
-import settings from "../../assets/routerImg/settings.png";
-import subscription from "../../assets/routerImg/subscription.png";
-import user from "../../assets/routerImg/user.png";
+
 import logo from "../../assets/header/logo1.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -11,24 +6,29 @@ import { FaChevronRight } from "react-icons/fa";
 import { IoIosLogIn } from "react-icons/io";
 import { logout } from "../../page/redux/features/auth/authSlice";
 import { useDispatch } from "react-redux";
+import { LuLayoutDashboard, LuUserPlus } from "react-icons/lu";
+import { HiOutlineUserGroup } from "react-icons/hi";
+import { HiOutlineBanknotes } from "react-icons/hi2";
+import { TfiMenuAlt } from "react-icons/tfi";
+import { IoSettingsOutline } from "react-icons/io5";
 
 const items = [
   {
     key: "dashboard",
     label: "Dashboard",
-    icon: dashboard,
+    icon: <LuLayoutDashboard />,
     link: "/",
   },
   {
     key: "userManagement",
     label: "User Management",
-    icon: user,
+    icon: <HiOutlineUserGroup />,
     link: "/dashboard/UserManagement",
   },
 {
     key: "category",
     label: "Category",
-    icon: user,
+    icon: <TfiMenuAlt />,
     link: "/dashboard/category",
   },
   
@@ -54,19 +54,20 @@ const items = [
   {
     key: "subscription",
     label: "Subscription",
-    icon: subscription,
+    icon: <HiOutlineBanknotes />,
     link: "/dashboard/Subscription",
   },
    {
     key: "admin",
     label: "Make Admin",
-    icon: subscription,
+    icon: <LuUserPlus />,
     link: "/dashboard/admin",
   },
   {
     key: "settings",
     label: "Settings",
-    icon: settings,
+    icon: <IoSettingsOutline />
+,
     link: "/dashboard/Settings/profile",
     children: [
       {
@@ -182,7 +183,7 @@ const SidBar = () => {
                   }
                 }}
               >
-                <img src={item.icon} alt={item.label} className="w-5 h-5 mr-3" />
+                <h1 className="w-7">{item.icon}</h1>
                 <span className="block w-full ">{item.label}</span>
 
                 {/* Show dropdown arrow if children exist */}
