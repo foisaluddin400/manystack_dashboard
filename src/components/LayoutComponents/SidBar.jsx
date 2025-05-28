@@ -59,7 +59,7 @@ const items = [
   },
    {
     key: "admin",
-    label: "Admin",
+    label: "Make Admin",
     icon: subscription,
     link: "/dashboard/admin",
   },

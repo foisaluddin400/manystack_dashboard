@@ -27,7 +27,7 @@ const UserManagement = () => {
             key: "1",
             no: "1",
             name: "John Doe",
-            date: "05/03/2025",
+        
             phone: "+1 9876543210",
             email: "johndoe@example.com",
             location: "New York, USA",
@@ -45,7 +45,7 @@ const UserManagement = () => {
             key: "3",
             no: "3",
             name: "Ali Khan",
-            date: "15/02/2025",
+           
             phone: "+92 3345678901",
             email: "alikhan@example.com",
             location: "Karachi, Pakistan",
@@ -54,7 +54,7 @@ const UserManagement = () => {
             key: "4",
             no: "4",
             name: "Emily Davis",
-            date: "20/05/2025",
+         
             phone: "+33 6789012345",
             email: "emilydavis@example.com",
             location: "Paris, France",
@@ -78,7 +78,7 @@ const UserManagement = () => {
                 </div>
             ),
         },
-        { title: "Date", dataIndex: "date", key: "date" },
+      
         { title: "Phone Number", dataIndex: "phone", key: "phone" },
         { title: "Email", dataIndex: "email", key: "email" },
         { title: "Location", dataIndex: "location", key: "location" },

@@ -15,6 +15,7 @@ const Admin = () => {
             phone: "+1 9876543210",
             email: "johndoe@example.com",
             location: "New York, USA",
+            type : 'Admin'
         },
         {
             key: "2",
@@ -24,6 +25,7 @@ const Admin = () => {
             phone: "+44 1234567890",
             email: "janesmith@example.com",
             location: "London, UK",
+            type : 'Admin'
         },
         {
             key: "3",
@@ -33,6 +35,7 @@ const Admin = () => {
             phone: "+92 3345678901",
             email: "alikhan@example.com",
             location: "Karachi, Pakistan",
+            type : 'Admin'
         },
         {
             key: "4",
@@ -42,6 +45,7 @@ const Admin = () => {
             phone: "+33 6789012345",
             email: "emilydavis@example.com",
             location: "Paris, France",
+            type : 'Admin'
         },
 
     ];
@@ -58,7 +62,8 @@ const Admin = () => {
 
             ),
         },
-        { title: "Price", dataIndex: "price", key: "price" },
+        { title: "Email", dataIndex: "email", key: "email" },
+         { title: "Type", dataIndex: "type", key: "type" },
 
         {
             title: "Action",

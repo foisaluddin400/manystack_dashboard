@@ -9,17 +9,17 @@ const Dashboard = () => {
     <div className="p-2 min-h-screen">
       <div className="  grid grid-cols-3 gap-4 text-center py-3">
         <div className="bg-white py-6 rounded-md">
-          <p className=" mt-3 text-xl">Total Customer</p>
-          <h1 className="text-3xl font-bold">123</h1>
+          <p className=" mt-3 text-xl">Total Earning</p>
+          <h1 className="text-3xl font-bold text-[#34C759]">$7.23</h1>
         </div>
         <div className=" bg-white py-6 rounded-md">
-          <p className=" mt-3 text-xl">Total Barber</p>
-          <h1 className="text-3xl font-bold">9</h1>
+          <p className=" mt-3 text-xl">Total Technician</p>
+          <h1 className="text-3xl font-bold text-[#34C759]">70+</h1>
 
         </div>
         <div className=" bg-white py-6 rounded-md">
-          <p className=" mt-3 text-xl">Total Barber</p>
-          <h1 className="text-3xl font-bold">9</h1>
+          <p className=" mt-3 text-xl">Blocked account</p>
+          <h1 className="text-3xl font-bold text-[#34C759]">10</h1>
 
         </div>
 
