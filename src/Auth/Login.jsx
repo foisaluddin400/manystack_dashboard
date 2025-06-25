@@ -3,33 +3,34 @@
 import { Checkbox, Form, Input, message, Spin } from "antd";
 
 import { Link, useNavigate } from "react-router-dom";
-// import { useLoginAdminMutation } from "../page/redux/api/userApi";
-// import { useDispatch } from "react-redux";
-// import { setToken } from "../page/redux/features/auth/authSlice";
+
 import { useState } from "react";
+import { useLoginAdminMutation } from "../page/redux/api/userApi";
+import { useDispatch } from "react-redux";
+import { setToken } from "../page/redux/features/auth/authSlice";
 const Login = () => {
-  
+  const [loginAdmin] = useLoginAdminMutation();
+    const navigate = useNavigate();
+     const dispatch = useDispatch();
+   const [loading, setLoading] = useState(false);
   const onFinish = async (values) => {
-    // setLoading(true);
-    // try {
-    //   console.log("Form Values:", values);
-    //   const payload = await loginAdmin(values).unwrap();
-    //   console.log("API Response:", payload);
-    //   if (payload?.success) {
-    //     // localStorage.setItem("accessToken", payload?.data?.accessToken);
-    //     dispatch(setToken(payload?.data?.accessToken))
-    //     message.success("Login successful!");
-    //     navigate("/");
-    //   } else {
-    //     message.error(payload?.message || "Login failed!");
-    //   }
-    // } catch (error) {
-    //   console.error("Login error:", error);
-    //   message.error(error?.data?.message || "Something went wrong. Try again!");
-    // } finally {
-    //   setLoading(false);
-    //   console.log("Login attempt finished.");
-    // }
+       setLoading(true);
+    try {
+     
+      const payload = await loginAdmin(values).unwrap();
+      setLoading(false);
+      if (payload) {
+      console.log(payload)
+        dispatch(setToken(payload?.token))
+        message.success(payload?.message);
+        setLoading(false);
+        navigate("/");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error("Login error:", error);
+      message.error(error?.data?.message || "Something went wrong. Try again!");
+    } 
   };
 
   
@@ -109,7 +110,11 @@ const Login = () => {
                 className="w-full mt-8 py-2 bg-gradient-to-r from-[#017FF4] to-blue-300 text-white rounded"
                 // disabled={loading}
               >
-                Submit
+                  {loading ? (
+                <Spin size="small" /> 
+              ) : (
+                "Submit"
+              )}
               </button>
             </Form.Item>
           </Form>

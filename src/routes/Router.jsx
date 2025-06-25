@@ -19,6 +19,7 @@ import Notification from "../page/Notification/Notification";
 import Login from "../Auth/Login";
 import Category from "../page/category/Category";
 import Admin from "../page/admin/Admin";
+import ProtectedRoute from "../protectedRoute/ProtectedRoute";
 
 
 export const router = createBrowserRouter([
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: (
      
-        <DashboardLayout></DashboardLayout>
+        <ProtectedRoute><DashboardLayout></DashboardLayout></ProtectedRoute>
       
     ),
     children: [

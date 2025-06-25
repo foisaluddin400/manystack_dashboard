@@ -1,4 +1,3 @@
-
 import logo from "../../assets/header/logo1.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
@@ -149,7 +148,7 @@ const SidBar = () => {
     <div className="custom-sidebar h-[100vh] bg-white">
       
       <div className="custom-sidebar-logo flex justify-start pt-3 pl-5">
-        <img src={logo} alt="Logo" className="w-[55px]" />
+        <Link to={'/'}><img src={logo} alt="Logo" className="w-[55px]" /></Link>
       </div>
       <div className="menu-items pt-7">
         {items.map((item) => {
