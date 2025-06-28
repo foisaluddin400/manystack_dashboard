@@ -2,24 +2,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input, message, Spin } from "antd";
 
 import { useState } from "react";
+import { useForgotPasswordMutation } from "../page/redux/api/userApi";
 
 const ForgetPass = () => {
   const navigate = useNavigate()
-
+const [forgetPass] = useForgotPasswordMutation()
   const [loading, setLoading] = useState(false);
+  
   const onFinish = async (values) => {
-   
-    // setLoading(true);
-    // forgotPassword(values)
-    //   .unwrap()
-    //   .then((payload) => {
-    //     message.success("check Your Email");
-    //     navigate("/verify");
-    //     localStorage.setItem("email", values?.email);
-    //     setLoading(false);
-    //   })
-    //   .catch((error) => message.error(error?.data?.message));
-    //   setLoading(false);
+    setLoading(true);
+    forgetPass(values)
+      .unwrap()
+      .then((payload) => {
+        message.success("check Your Email");
+        navigate("/verify");
+        localStorage.setItem("email", values?.email);
+        setLoading(false);
+      })
+      .catch((error) => message.error(error?.data?.message));
+      setLoading(false);
   };
 
   return (

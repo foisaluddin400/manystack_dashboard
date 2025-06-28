@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Modal, Table } from "antd";
+import { Input, message, Modal, Table } from "antd";
 import { useState } from "react";
 import { MdBlockFlipped } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
@@ -7,60 +7,91 @@ import { AiOutlinePhone, AiOutlineMail } from "react-icons/ai";
 import { GoLocation } from "react-icons/go";
 import Navigate from '../Navigate';
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { useBlockUserMutation, useGetAllUserQuery, useUnblockUserMutation } from '../redux/api/userApi';
+import { imageUrl } from '../redux/api/baseApi';
 const UserManagement = () => {
 
     const [isModalOpen2, setIsModalOpen2] = useState(false);
 
+    const [blockUser] = useBlockUserMutation();
+    const [unblockUser] = useUnblockUserMutation();
 
 
-    const showModal2 = () => {
-        setIsModalOpen2(true);
+    const { data: userData } = useGetAllUserQuery();
+    const [selectedUser, setSelectedUser] = useState(null);
+
+
+    // Table data from API
+    const dataSource = userData?.data?.map((user, index) => ({
+        key: user._id,
+        no: index + 1,
+        name: `${user.firstName} ${user.lastName}`,
+        email: user.email,
+        phone: user.contact,
+        profilePicture: user.profilePicture || `https://avatar.iran.liara.run/public/${index + 1}`,
+        gender: user.gender,
+        address: user.address,
+        nSiren: user.nSiren,
+        isBlocked: user.isBlocked,
+    })) || [];
+
+
+
+    const handleBlockToggle = async (id, isBlocked) => {
+        try {
+            const res = isBlocked
+                ? await unblockUser(id).unwrap()
+                : await blockUser(id).unwrap();
+
+            message.success(res?.message || (isBlocked ? "User unblocked!" : "User blocked!"));
+        } catch (err) {
+            message.error(err?.data?.message || "Action failed!");
+        }
     };
 
 
 
-    const handleCancel2 = () => {
-        setIsModalOpen2(false);
-    };
-    const dataSource = [
-        {
-            key: "1",
-            no: "1",
-            name: "John Doe",
-        
-            phone: "+1 9876543210",
-            email: "johndoe@example.com",
-            location: "New York, USA",
-        },
-        {
-            key: "2",
-            no: "2",
-            name: "Jane Smith",
-            date: "10/04/2025",
-            phone: "+44 1234567890",
-            email: "janesmith@example.com",
-            location: "London, UK",
-        },
-        {
-            key: "3",
-            no: "3",
-            name: "Ali Khan",
-           
-            phone: "+92 3345678901",
-            email: "alikhan@example.com",
-            location: "Karachi, Pakistan",
-        },
-        {
-            key: "4",
-            no: "4",
-            name: "Emily Davis",
-         
-            phone: "+33 6789012345",
-            email: "emilydavis@example.com",
-            location: "Paris, France",
-        },
 
-    ];
+
+    // const dataSource = [
+    //     {
+    //         key: "1",
+    //         no: "1",
+    //         name: "John Doe",
+
+    //         phone: "+1 9876543210",
+    //         email: "johndoe@example.com",
+    //         location: "New York, USA",
+    //     },
+    //     {
+    //         key: "2",
+    //         no: "2",
+    //         name: "Jane Smith",
+    //         date: "10/04/2025",
+    //         phone: "+44 1234567890",
+    //         email: "janesmith@example.com",
+    //         location: "London, UK",
+    //     },
+    //     {
+    //         key: "3",
+    //         no: "3",
+    //         name: "Ali Khan",
+
+    //         phone: "+92 3345678901",
+    //         email: "alikhan@example.com",
+    //         location: "Karachi, Pakistan",
+    //     },
+    //     {
+    //         key: "4",
+    //         no: "4",
+    //         name: "Emily Davis",
+
+    //         phone: "+33 6789012345",
+    //         email: "emilydavis@example.com",
+    //         location: "Paris, France",
+    //     },
+
+    // ];
 
     const columns = [
         { title: "No", dataIndex: "no", key: "no" },
@@ -70,7 +101,7 @@ const UserManagement = () => {
             render: (_, record) => (
                 <div className="flex items-center gap-3">
                     <img
-                        src={`https://avatar.iran.liara.run/public/${record.no}`}
+                        src={record.profilePicture}
                         className="w-10 h-10 object-cover rounded-full"
                         alt="User Avatar"
                     />
@@ -78,33 +109,37 @@ const UserManagement = () => {
                 </div>
             ),
         },
-      
         { title: "Phone Number", dataIndex: "phone", key: "phone" },
         { title: "Email", dataIndex: "email", key: "email" },
-        { title: "Location", dataIndex: "location", key: "location" },
         {
             title: "Action",
             key: "action",
-            render: (_, record) => {
-                return (
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => showModal(record)}
-                            className=" "
-                        >
-                            <MdBlockFlipped className="w-8 h-8 text-[#14803c]" />
-                        </button>
-                        <button
-                            onClick={() => showModal2(record)}
-                            className=" text-[#017FF4]"
-                        >
-                            <FaRegEye className="w-8 h-8 " />
-                        </button>
-                    </div>
-                );
-            },
-        },
+            render: (_, record) => (
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => handleBlockToggle(record.key, record.isBlocked)}
+                        title={record.isBlocked ? "Unblock User" : "Block User"}
+                    >
+                        <MdBlockFlipped
+                            className={`w-8 h-8 ${record.isBlocked ? "text-red-500" : "text-green-600"}`}
+                        />
+                    </button>
+                    <button
+                        onClick={() => {
+                            setSelectedUser(record);
+                            setIsModalOpen2(true);
+                        }}
+                        title="View Details"
+                    >
+                        <FaRegEye className="w-8 h-8 text-[#017FF4]" />
+                    </button>
+                </div>
+            ),
+        }
+
+
     ];
+
     return (
         <div className='h-screen'>
             <div className="flex justify-between">
@@ -126,43 +161,62 @@ const UserManagement = () => {
             <Modal
                 open={isModalOpen2}
                 centered
-                onCancel={handleCancel2}
+                onCancel={() => setIsModalOpen2(false)}
                 footer={null}
+                width={450}
             >
-                <div className="w-full max-w-md  p-5 relative mx-auto">
-                    {/* Profile header */}
-                    <div className="flex flex-col items-center mb-6">
-                        <div className="w-24 h-24 rounded-full bg-blue-100 mb-3 overflow-hidden">
-                            <img
-                                src="https://avatar.iran.liara.run/public/24"
-                                alt="Profile avatar"
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                        <h2 className="text-xl font-bold">Ely Mohammed</h2>
-
-                        {/* Contact info */}
-                        <div className="flex items-center text-gray-500 mt-1">
-                            <AiOutlinePhone size={16} className="text-gray-400" />
-                            <span className="ml-1 text-sm">(629) 555-0129</span>
+                {selectedUser && (
+                    <div className="bg-white rounded-lg overflow-hidden">
+                        {/* Header with image and role */}
+                        <div className="bg-blue-100 py-6 text-center">
+                            <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-white shadow-md">
+                                <img
+                                    src={`${imageUrl}/${selectedUser.profilePicture}` || "https://avatar.iran.liara.run/public/24"}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <h2 className="text-xl font-semibold mt-2">{selectedUser.name}</h2>
+                            <p className="text-gray-600 text-sm">{selectedUser.role || "Technicians"}</p>
                         </div>
 
-                        <div className="flex items-center text-gray-500 mt-1">
-                            <GoLocation size={16} className="text-gray-400" />
-                            <span className="ml-1 text-sm">Great Falls, Maryland</span>
-                        </div>
-
-                        <div className="flex items-center text-gray-500 mt-1">
-                            <AiOutlineMail size={16} className="text-gray-400" />
-                            <span className="ml-1 text-sm">Marvin@gmail.com</span>
+                        {/* User Details */}
+                        <div className="px-6 py-4 space-y-3 text-sm">
+                            <div>
+                                <p className="text-gray-600 font-semibold">Name</p>
+                                <p>{selectedUser.name}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-600 font-semibold">Email</p>
+                                <p>{selectedUser.email}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-600 font-semibold">Contact No</p>
+                                <p>{selectedUser.phone}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-600 font-semibold">Siren no</p>
+                                <p>{selectedUser.nSiren}</p>
+                            </div>
+                            <div>
+                                <p className="text-gray-600 font-semibold">Gender</p>
+                                <p>{selectedUser.gender}</p>
+                            </div>
+                            {selectedUser.address && (
+                                <div>
+                                    <p className="text-gray-600 font-semibold">Address</p>
+                                    <p>
+                                        {selectedUser.address.streetNo} {selectedUser.address.streetName},
+                                        {selectedUser.address.postalCode} {selectedUser.address.city}, {selectedUser.address.country}
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
+                )}
+            </Modal>
 
-
-
-
-                </div>
-            </Modal></div>
+        </div>
     );
 };
 

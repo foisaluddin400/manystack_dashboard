@@ -2,23 +2,25 @@ import { Form, Modal, Upload, DatePicker, TimePicker, Input, message, Spin, Butt
 import React, { useEffect, useState } from "react";
 import { PlusOutlined, MinusCircleOutlined, } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { useAddCategoryMutation } from "../redux/api/categoryApi";
+import { useAddCategoryMutation, useUpdateCategoryMutation } from "../redux/api/categoryApi";
 
-const AddCategory = ({ openAddModal, setOpenAddModal }) => {
-    const [addCategory] = useAddCategoryMutation()
+const EditCategory = ({ editModal, setEditModal, selectedProduct }) => {
+    console.log(selectedProduct)
+    const id = selectedProduct?.key
+    const [updateCategory] = useUpdateCategoryMutation()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
 
     const handleCancel = () => {
         form.resetFields();
-        setOpenAddModal(false);
+        setEditModal(false);
     };
 
 
     const handleSubmit = async (values) => {
         setLoading(true);
         const data = {
-            categoryType: values.categoryType,
+            categoryType: selectedProduct.categoryType,
             // categoryType: 'INTERVENTION',
             categoryName: values.name,
             price: values.price
@@ -27,11 +29,11 @@ const AddCategory = ({ openAddModal, setOpenAddModal }) => {
 
         try {
 
-            const response = await addCategory(data).unwrap();
+            const response = await updateCategory({data,id}).unwrap();
             message.success(response.message);
 
             form.resetFields();
-            setOpenAddModal(false);
+            setEditModal(false);
         } catch (error) {
             console.log(error);
             message.error(error?.data?.message || "Something went wrong!");
@@ -40,10 +42,23 @@ const AddCategory = ({ openAddModal, setOpenAddModal }) => {
         }
     };
 
+        useEffect(() => {
+            if (selectedProduct) {
+    const rawPrice = selectedProduct?.price || "";
+      const numericPrice = Number(rawPrice.replace(/[^0-9.]/g, ""));
+    
+                form.setFieldsValue({
+                    name: selectedProduct?.name || "",
+                    categoryType: selectedProduct?.categoryType || "",
+                    price: isNaN(numericPrice) ? "" : numericPrice,
+                   
+                });
+            }
+        }, [selectedProduct, form]);
     return (
         <Modal
             centered
-            open={openAddModal}
+            open={editModal}
             onCancel={handleCancel}
             footer={null}
             width={500}
@@ -62,7 +77,7 @@ const AddCategory = ({ openAddModal, setOpenAddModal }) => {
                         name="categoryType"
                         rules={[{ required: true, message: "Please select Categoey type" }]}
                     >
-                        <Select placeholder="Select Category type">
+                        <Select disabled placeholder="Select Category type">
                             <Option value="INTERVENTION">Intervention</Option>
                             <Option value="EXPENSE">Expense</Option>
                         </Select>
@@ -108,4 +123,4 @@ const AddCategory = ({ openAddModal, setOpenAddModal }) => {
     );
 };
 
-export default AddCategory;
+export default EditCategory;

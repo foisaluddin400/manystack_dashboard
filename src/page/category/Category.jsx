@@ -7,6 +7,7 @@ import AddCategory from './AddCategory';
 const Category = () => {
     const [activeTab, setActiveTab] = useState("list");
     const [openAddModal, setOpenAddModal] = useState(false);
+    
     return (
         <div className='h-screen'>
             <div className="flex justify-between">

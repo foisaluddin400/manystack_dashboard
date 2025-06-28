@@ -2,43 +2,43 @@ import { Form, Modal, Upload, DatePicker, TimePicker, Input, message, Spin, Butt
 import React, { useEffect, useState } from "react";
 import { PlusOutlined, MinusCircleOutlined, } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { useMakeAdminMutation } from "../redux/api/userApi";
 
 const AddAdmin = ({ openAddModal, setOpenAddModal }) => {
 
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
-
+const [makeAdmin] = useMakeAdminMutation()
     const handleCancel = () => {
         form.resetFields();
         setOpenAddModal(false);
     };
 
 
-    const handleSubmit = async (values) => {
-        console.log(values)
-        // const formData = new FormData();
-
-        // formData.append("url", values?.url);
-
-
-        // fileList.forEach((file) => {
-        //   formData.append("image", file.originFileObj);
-        // });
-        // setLoading(true);
-
-        // try {
-        //   const res= await adds(formData).unwrap();
-
-        //   setLoading(false);
-        //   message.success(res?.message);
-        //   setOpenAddModal(false);
-        //   setLoading(false);
-        //   form.resetFields();
-        // } catch (error) {
-        //   message.error(` ${error?.data?.message}`);
-        //   setLoading(false);
-        // }
-    };
+   const handleSubmit = async (values) => {
+           setLoading(true);
+           const data = {
+               name: values.name,
+               // categoryType: 'INTERVENTION',
+               email: values.email,
+               password: values.password,
+               userType: 'admin'
+           };
+   
+           try {
+   
+               const response = await makeAdmin(data).unwrap();
+               message.success(response.message);
+   
+               form.resetFields();
+               setOpenAddModal(false);
+           } catch (error) {
+               console.log(error);
+               message.error(error?.data?.message || "Something went wrong!");
+           } finally {
+               setLoading(false);
+           }
+       };
 
     return (
         <Modal
@@ -61,7 +61,7 @@ const AddAdmin = ({ openAddModal, setOpenAddModal }) => {
                         label="Name"
                         name="name"
                         rules={[
-                            { required: true, message: "Please input auction item name!" },
+                            { required: true, message: "Please input name!" },
                         ]}
                     >
                         <Input placeholder="Enter auction item name" style={{ borderRadius: "0px", padding: "6px 8px" }} />
@@ -72,10 +72,10 @@ const AddAdmin = ({ openAddModal, setOpenAddModal }) => {
                             label="email"
                             name="email"
                             rules={[
-                                { required: true, message: "Please input number!" },
+                                { required: true, message: "Please input Email!" },
                             ]}
                         >
-                            <Input type="number" placeholder="Enter number" style={{ borderRadius: "0px", padding: "6px 8px" }} />
+                            <Input type="email" placeholder="Enter Email" style={{ borderRadius: "0px", padding: "6px 8px" }} />
                         </Form.Item>
                  
 
@@ -86,7 +86,7 @@ const AddAdmin = ({ openAddModal, setOpenAddModal }) => {
                                 { required: true, message: "Please Password" },
                             ]}
                         >
-                            <Input.Password type="password" placeholder ="Enter number" style={{ borderRadius: "0px", padding: "6px 8px" }} />
+                            <Input.Password type="password" placeholder ="Enter Password" style={{ borderRadius: "0px", padding: "6px 8px" }} />
                         </Form.Item>
                 
 

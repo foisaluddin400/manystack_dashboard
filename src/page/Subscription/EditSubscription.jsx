@@ -1,17 +1,20 @@
-import { Form, Modal, Upload, DatePicker, TimePicker, Input, message, Spin, Button } from "antd";
+import { Form, Modal, Upload, DatePicker, TimePicker, Input, message, Spin, Button, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { PlusOutlined, MinusCircleOutlined, } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { useUpdateSubscriptionMutation } from "../redux/api/categoryApi";
 
-const EditSubscription = ({ editModal, setEditModal }) => {
-
+const EditSubscription = ({ editModal, setEditModal, selectedProduct }) => {
+    console.log(selectedProduct?._id)
+    const id = selectedProduct?._id
+    const [updateSubs] = useUpdateSubscriptionMutation()
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
 
 
     const handleCancel = () => {
         form.resetFields();
-      
+
         setEditModal(false);
     };
 
@@ -20,31 +23,42 @@ const EditSubscription = ({ editModal, setEditModal }) => {
     }, [form]);
 
     const handleSubmit = async (values) => {
-        console.log(values)
-        // const formData = new FormData();
 
-        // formData.append("url", values?.url);
+        setLoading(true);
+        const data = {
+            validity: values.validity,
+            name: values.name,
+            price: values.price,
+            features: values.ingredients
+        };
 
+        try {
 
-        // fileList.forEach((file) => {
-        //   formData.append("image", file.originFileObj);
-        // });
-        // setLoading(true);
+            const response = await updateSubs({data,id}).unwrap();
+            message.success(response.message);
 
-        // try {
-        //   const res= await adds(formData).unwrap();
-
-        //   setLoading(false);
-        //   message.success(res?.message);
-        //   setOpenAddModal(false);
-        //   setLoading(false);
-        //   form.resetFields();
-        // } catch (error) {
-        //   message.error(` ${error?.data?.message}`);
-        //   setLoading(false);
-        // }
+            form.resetFields();
+            setEditModal(false);
+        } catch (error) {
+            console.log(error);
+            message.error(error?.data?.message || "Something went wrong!");
+        } finally {
+            setLoading(false);
+        }
     };
 
+    useEffect(() => {
+        if (selectedProduct) {
+
+
+            form.setFieldsValue({
+                name: selectedProduct?.name || "",
+                validity: selectedProduct?.validity || "",
+                price: selectedProduct?.price || "",
+                ingredients: selectedProduct?.features || [],
+            });
+        }
+    }, [selectedProduct, form]);
     return (
         <Modal
             centered
@@ -75,7 +89,7 @@ const EditSubscription = ({ editModal, setEditModal }) => {
                     <div className="grid grid-cols-2 gap-3">
                         <Form.Item
                             label="Namber"
-                            name="number"
+                            name="price"
                             rules={[
                                 { required: true, message: "Please input number!" },
                             ]}
@@ -84,12 +98,13 @@ const EditSubscription = ({ editModal, setEditModal }) => {
                         </Form.Item>
                         <Form.Item
                             label="Validity"
-                            name="Validity"
-                            rules={[
-                                { required: true, message: "Please input auction item name!" },
-                            ]}
+                            name="validity"
+                            rules={[{ required: true, message: "Please select validity" }]}
                         >
-                            <Input placeholder="Enter auction item name" style={{ borderRadius: "0px", padding: "6px 8px" }} />
+                            <Select placeholder="Select validity">
+                                <Option value="Yearly">Yearly</Option>
+                                <Option value="Monthly">Monthly</Option>
+                            </Select>
                         </Form.Item>
                     </div>
 

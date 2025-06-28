@@ -12,7 +12,17 @@ const useApi = baseApi.injectEndpoints({
         };
       },
     }),
-    
+
+     getAllUser: builder.query({
+      query: () => {
+        return {
+          url: "/api/dashboard/user-management/getAllUsers",
+          method: "GET",
+        };
+      },
+      providesTags: ["updateProfile"],
+    }),
+
     getProfile: builder.query({
       query: () => {
         return {
@@ -22,10 +32,43 @@ const useApi = baseApi.injectEndpoints({
       },
       providesTags: ["updateProfile"],
     }),
+
+    getAdmin: builder.query({
+      query: () => {
+        return {
+          url: "/api/dashboard/admins",
+          method: "GET",
+        };
+      },
+      providesTags: ["updateProfile"],
+    }),
+
+    makeAdmin: builder.mutation({
+      query: (data) => {
+        return {
+          url: "/api/dashboard/make-admin",
+          method: "POST",
+          body: data,
+        };
+      },
+       invalidatesTags: ["updateProfile"],
+    }),
+
+    deleteAdmin: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/api/dashboard/admin/${id}`,
+          method: 'DELETE'
+        }
+      },
+      invalidatesTags: ['updateProfile']
+    }),
+
+
     forgotPassword: builder.mutation({
       query: (email) => {
         return {
-          url: "/auth/forgot-password",
+          url: "/api/auth/forgot-password",
           method: "POST",
           body: email,
         };
@@ -34,7 +77,7 @@ const useApi = baseApi.injectEndpoints({
     verifyOtp: builder.mutation({
       query: (data) => {
         return {
-          url: "/auth/recovery-verification",
+          url: "/api/auth/verify-code",
           method: "POST",
           body: data,
         };
@@ -43,7 +86,7 @@ const useApi = baseApi.injectEndpoints({
     resetPassword: builder.mutation({
       query: (data) => {
         return {
-          url: "/auth/reset-password",
+          url: "/api/auth/reset-password",
           method: "PUT",
           body: data,
         };
@@ -79,13 +122,21 @@ const useApi = baseApi.injectEndpoints({
       providesTags: ["host"],
     }),
 
-    blockUserHost: builder.mutation({
-      query: (data) => ({
-        url: `/dashboard/block-unblock-user`,
-        method: "PATCH",
-        body: data,
+    blockUser: builder.mutation({
+      query: (id) => ({
+        url: `/api/dashboard/user-management/blockUser/${id}`,
+        method: "PUT",
+        // body: data,
       }),
-      invalidatesTags: ["host"], 
+      invalidatesTags: ["updateProfile"],
+    }),
+     unblockUser: builder.mutation({
+      query: (id) => ({
+        url: `/api/dashboard/user-management/unBlockUser/${id}`,
+        method: "PUT",
+        // body: data,
+      }),
+      invalidatesTags: ["updateProfile"],
     }),
   }),
 });
@@ -99,5 +150,10 @@ export const {
   useUpdateProfileMutation,
   useChangePasswordMutation,
   useGetHostUserQuery,
-  useBlockUserHostMutation,
+useBlockUserMutation,
+useUnblockUserMutation,
+  useGetAdminQuery,
+  useMakeAdminMutation,
+  useDeleteAdminMutation,
+  useGetAllUserQuery
 } = useApi;
