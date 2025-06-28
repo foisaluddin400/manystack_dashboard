@@ -26,7 +26,7 @@ const useApi = baseApi.injectEndpoints({
     getProfile: builder.query({
       query: () => {
         return {
-          url: "/admin/profile",
+          url: "/api/dashboard/adminprofile/update-admin",
           method: "GET",
         };
       },
@@ -68,7 +68,7 @@ const useApi = baseApi.injectEndpoints({
     forgotPassword: builder.mutation({
       query: (email) => {
         return {
-          url: "/api/auth/forgot-password",
+          url: "/api/dashboard/adminprofile/forget-password",
           method: "POST",
           body: email,
         };
@@ -77,17 +77,29 @@ const useApi = baseApi.injectEndpoints({
     verifyOtp: builder.mutation({
       query: (data) => {
         return {
-          url: "/api/auth/verify-code",
+          url: "/api/dashboard/adminprofile/verify-code",
           method: "POST",
           body: data,
         };
       },
     }),
+
+ resentCode: builder.mutation({
+      query: (data) => {
+        return {
+          url: "/api/dashboard/adminprofile/resend-code",
+          method: "POST",
+          body: data,
+        };
+      },
+    }),
+
+
     resetPassword: builder.mutation({
       query: (data) => {
         return {
-          url: "/api/auth/reset-password",
-          method: "PUT",
+          url: "/api/dashboard/adminprofile/reset-password",
+          method: "POST",
           body: data,
         };
       },
@@ -105,7 +117,7 @@ const useApi = baseApi.injectEndpoints({
     changePassword: builder.mutation({
       query: (data) => {
         return {
-          url: "/auth/change-password",
+          url: "/api/dashboard/adminprofile/update-password",
           method: "PUT",
           body: data,
         };

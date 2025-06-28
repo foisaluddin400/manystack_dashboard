@@ -4,29 +4,30 @@ import OTPInput from "react-otp-input";
 import { Link, useNavigate } from "react-router-dom";
 
 import { message, Spin } from "antd";
+import { useVerifyOtpMutation } from "../page/redux/api/userApi";
 
 const Verify = () => {
-
+const[verifyOtp] = useVerifyOtpMutation();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
   const [otp, setOtp] = useState("");
 
   const handleVerify = async () => {
-    // const data = {
-    //   code: otp,
-    //   email: localStorage.getItem("email"),
-    // };
-    // setLoading(true);
-    // try {
-    //   const response = await verifyOtp(data).unwrap();
-    //   setLoading(false);
-    //   message.success(response?.message);
-    //   navigate("/reset");
-    // } catch (error) {
-    //   console.error(error); 
-    //   message.error(error?.data?.message );
-    //   setLoading(false);
-    // }
+    const data = {
+      code: otp,
+      // email: localStorage.getItem("email"),
+    };
+    setLoading(true);
+    try {
+      const response = await verifyOtp(data).unwrap();
+      setLoading(false);
+      message.success(response?.message);
+      navigate("/reset");
+    } catch (error) {
+      console.error(error); 
+      message.error(error?.data?.message );
+      setLoading(false);
+    }
   };
 
   const handleResend =async () => {

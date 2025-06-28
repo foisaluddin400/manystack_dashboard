@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Avatar, Upload, Form, Input, Button, message } from "antd";
 import { IoCameraOutline } from "react-icons/io5";
 import { PasswordTab } from "./PasswordTab";
+import { useGetProfileQuery } from "../redux/api/userApi";
 
 
 
@@ -10,7 +11,8 @@ import { PasswordTab } from "./PasswordTab";
 
 
 const Profile = () => {
-
+const {data:profileData} = useGetProfileQuery()
+console.log(profileData)
   const [activeTab, setActiveTab] = useState("1");
   // const[updateProfile] = useUpdateProfileMutation();
   const [form] = Form.useForm();
