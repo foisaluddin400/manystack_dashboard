@@ -25,9 +25,9 @@ const setting = baseApi.injectEndpoints({
         }),
 
         getMetaChart: builder.query({
-            query: () => {
+            query: ({year}) => {
                 return {
-                    url: `/api/dashboard/home/charts`,
+                    url: `/api/dashboard/home/charts?year=${year}`,
                     method: "GET",
                 };
             },
