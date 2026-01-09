@@ -50,12 +50,7 @@ const items = [
   //     },
   //   ],
   // },
-  {
-    key: "subscription",
-    label: "Subscription",
-    icon: <HiOutlineBanknotes />,
-    link: "/dashboard/Subscription",
-  },
+ 
    {
     key: "admin",
     label: "Make Admin",
