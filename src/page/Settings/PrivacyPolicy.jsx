@@ -28,16 +28,22 @@ const [addPrivecy] = useAddPrivecyMutation()
   };
   const config = {
     readonly: false,
-    placeholder: 'Start typings...',
+    placeholder: "Start typings...",
     style: {
-      height: 600,
+      height: 650,
     },
     buttons: [
-      'image', 'fontsize', 'bold', 'italic', 'underline', '|',
-      'font', 'brush',
-      'align'
-    ]
-  }
+   
+      "fontsize",
+      "bold",
+      "italic",
+      "underline",
+      "|",
+      "font",
+      "brush",
+      "align",
+    ],
+  };
 //sdfdfsdfdsfasfdas
 
    useEffect(() => {
@@ -56,7 +62,7 @@ const [addPrivecy] = useAddPrivecyMutation()
         config={config}
         tabIndex={1}
         onBlur={newContent => setContent(newContent)}
-        onChange={newContent => { }}
+        
       />
       </div>
 

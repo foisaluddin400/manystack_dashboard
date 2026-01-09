@@ -26,7 +26,7 @@ const useApi = baseApi.injectEndpoints({
     getProfile: builder.query({
       query: () => {
         return {
-          url: "/api/dashboard/adminprofile/update-admin",
+          url: "/api/dashboard/adminprofile/get-profile",
           method: "GET",
         };
       },
@@ -107,8 +107,8 @@ const useApi = baseApi.injectEndpoints({
     updateProfile: builder.mutation({
       query: (data) => {
         return {
-          url: "/admin/edit-profile",
-          method: "PATCH",
+          url: "/api/dashboard/adminprofile/update-admin",
+          method: "PUT",
           body: data,
         };
       },

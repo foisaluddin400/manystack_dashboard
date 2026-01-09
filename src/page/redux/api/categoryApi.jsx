@@ -14,6 +14,26 @@ const setting = baseApi.injectEndpoints({
             providesTags: ["updateProfile"],
         }),
 
+          getMetaData: builder.query({
+            query: () => {
+                return {
+                    url: `/api/dashboard/home/stats`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["updateProfile"],
+        }),
+
+        getMetaChart: builder.query({
+            query: () => {
+                return {
+                    url: `/api/dashboard/home/charts`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["updateProfile"],
+        }),
+
         addCategory: builder.mutation({
             query: (data) => {
                 return {
@@ -237,6 +257,8 @@ export const {
     useAddPrivecyMutation,
     useGetPrivecyQuery,
     useGetTermsQuery,
+    useGetMetaChartQuery,
+    useGetMetaDataQuery,
     useAddTermsMutation
 
 } = setting;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Avatar, Upload, Form, Input, Button, message } from "antd";
 import { IoCameraOutline } from "react-icons/io5";
 import { PasswordTab } from "./PasswordTab";
-import { useGetProfileQuery } from "../redux/api/userApi";
+import { useGetProfileQuery, useUpdateProfileMutation } from "../redux/api/userApi";
 
 
 
@@ -14,10 +14,10 @@ const Profile = () => {
 const {data:profileData} = useGetProfileQuery()
 console.log(profileData)
   const [activeTab, setActiveTab] = useState("1");
-  // const[updateProfile] = useUpdateProfileMutation();
+  const[updateProfile] = useUpdateProfileMutation();
   const [form] = Form.useForm();
   const [image, setImage] = useState();
-  // const {data: profile} = useGetProfileQuery()
+ 
   
 
 
@@ -31,31 +31,31 @@ console.log(profileData)
  
 
 
-  // useEffect(() => {
-  //   if (profile) {
-  //     form.setFieldsValue({
-  //       name: profile.name,
-  //       email: profile.email,
-  //       phone: profile.phone,
-  //     });
-  //   }
-  // }, [profile, form]);
+  useEffect(() => {
+    if (profileData) {
+      form.setFieldsValue({
+        name: profileData?.data?.name,
+        email: profileData?.data?.email,
+        contact: profileData?.data?.contact,
+      });
+    }
+  }, [profileData, form]);
 
   const onEditProfile = async (values) => {
-    // const data = new FormData();
-    // if (image) data.append("photo", image);
-    // data.append("name", values.name);
-    // data.append("phone", values.phone);
-    //  try {
-    //       const response = await updateProfile(data).unwrap();
-    //       console.log(response)
-    //       message.success(response.message);
+    const data = new FormData();
+    if (image) data.append("image", image);
+    data.append("name", values.name);
+    data.append("contact", values.contact);
+     try {
+          const response = await updateProfile(data).unwrap();
+          console.log(response)
+          message.success(response.message);
 
-    //     } catch (error) {
-    //       message.error(error.data.message);
+        } catch (error) {
+          message.error(error.data.message);
          
-    //       console.log(error);
-    //     }
+          console.log(error);
+        }
   };
 
 
@@ -82,7 +82,7 @@ console.log(profileData)
                 />
               </Form.Item>
 
-              <Form.Item name="phone" label="Phone Number">
+              <Form.Item name="contact" label="Phone Number">
                 <Input
                   style={{ padding: "9px", borderRadius: "0px" }}
                   placeholder="Enter Phone Number"
@@ -125,7 +125,7 @@ console.log(profileData)
             src={`${
               image
                 ? URL.createObjectURL(image)
-                : `ddd`
+                : `${profileData?.data?.image}`
             }`}
             alt="Admin Profile"
           />
