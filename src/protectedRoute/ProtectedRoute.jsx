@@ -1,49 +1,41 @@
-// import React, { useEffect } from "react";
-// import { Navigate, useLocation, useNavigate } from "react-router-dom";
-// import { Skeleton } from "antd";
-
-// import { useGetSuperAdminQuery } from "../page/redux/api/userApi";
-
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const ProtectedRoute = ({ children }) => {
-  // const location = useLocation();
-  // const navigate = useNavigate(); // Added useNavigate
-  // const accessToken = localStorage.getItem("accessToken");
+    const { token } = useSelector((state) => state.logInUser);
+    const { pathname } = useLocation();
 
-  // if (!accessToken) {
-  //   return <Navigate to={"/login"} state={{ from: location }} replace />;
-  // }
+    // Function to check if token is expired
+    const isTokenExpired = (token) => {
+        if (!token) return true;
 
-  // const { data: getUserInfo, isError, isLoading, isSuccess } = useGetSuperAdminQuery(undefined, {
-  //   refetchOnMountOrArgChange: true,
-  // });
+        try {
+            // Decode JWT payload (Base64)
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            
+            // Check expiration (exp is in seconds)
+            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+            return payload.exp < currentTime;
+        } catch (error) {
+            console.error("Invalid token format:", error);
+            return true; // Treat invalid token as expired
+        }
+    };
 
-  // useEffect(() => {
-  //   if (isError || (!isLoading && !isSuccess) || !getUserInfo?.data || !["admin", "super_admin"].includes(getUserInfo.data.role)) {
-  //     navigate("/login", { state: { from: location }, replace: true });
-  //   }
-  // }, [isError, isLoading, isSuccess, getUserInfo, navigate, location]);
+    // If no token or token is expired → redirect to login
+    if (!token || isTokenExpired(token)) {
+        return <Navigate 
+            to="/login" 
+            state={{ 
+                path: pathname,
+                message: "Session expired. Please login again." 
+            }} 
+            replace 
+        />;
+    }
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <Skeleton active />
-  //     </div>
-  //   );
-  // }
-
-  // return children;
-  
-  const {token} = useSelector((state) => state.logInUser)
-  console.log(token)
-  const { pathname } = useLocation();
-
-  if (!token) {
-      return <Navigate to="/login" state={{ path: pathname }}></Navigate>;
-  }
-  return children;
+    return children;
 };
 
 export default ProtectedRoute;
