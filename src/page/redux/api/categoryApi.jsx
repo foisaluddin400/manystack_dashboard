@@ -24,6 +24,18 @@ const setting = baseApi.injectEndpoints({
             providesTags: ["updateProfile"],
         }),
 
+
+          getSupportData: builder.query({
+            query: () => {
+                return {
+                    url: `/api/support/get-all`,
+                    method: "GET",
+                };
+            },
+            providesTags: ["updateProfile"],
+        }),
+
+
         getMetaChart: builder.query({
             query: ({year}) => {
                 return {
@@ -259,6 +271,7 @@ export const {
     useGetTermsQuery,
     useGetMetaChartQuery,
     useGetMetaDataQuery,
-    useAddTermsMutation
+    useAddTermsMutation,
+    useGetSupportDataQuery
 
 } = setting;

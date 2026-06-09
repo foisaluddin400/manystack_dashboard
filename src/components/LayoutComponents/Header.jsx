@@ -17,6 +17,7 @@ import logo from "../../assets/header/logo.png";
 import { FaChevronRight } from "react-icons/fa";
 
 import { IoIosLogIn } from "react-icons/io";
+import { useGetProfileQuery } from "../../page/redux/api/userApi";
 
 const items = [
   {
@@ -96,7 +97,7 @@ const Header = () => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const navigate = useNavigate();
  
-
+const {data:profileData} = useGetProfileQuery()
   const contentRef = useRef({});
   
 
@@ -126,7 +127,7 @@ const Header = () => {
     navigate("/login");
   };
   return (
-    <div className="bg-white text-white pt-5">
+    <div className="bg-white text-white pt-3">
       <div className="flex justify-between">
         <div className="lg:hidden ">
           <div className="py-3 pl-4">
@@ -261,16 +262,16 @@ const Header = () => {
           </div>
 
           <Link to={"/dashboard/Settings/profile"}>
-            <div className="flex gap-3">
+            <div className="flex text-black gap-3">
               <div>
                 <img
                   className="w-[45px] h-[45px]"
-                  src={profilee}
+                  src={profileData?.data?.image}
                   alt="profile"
                 />
               </div>
               <div className="text-end">
-                <h3>{ "Loading..."}</h3>
+                <h3>{profileData?.data?.name}</h3>
                 <h4 className="text-sm">Admin</h4>
               </div>
             </div>

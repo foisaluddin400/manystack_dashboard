@@ -20,6 +20,7 @@ import Login from "../Auth/Login";
 import Category from "../page/category/Category";
 import Admin from "../page/admin/Admin";
 import ProtectedRoute from "../protectedRoute/ProtectedRoute";
+import Support from "../page/support/Support";
 
 
 export const router = createBrowserRouter([
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
    {
         path: "/dashboard/category",
         element:<Category></Category>
+      },
+{
+        path: "/dashboard/support",
+        element:<Support></Support>
       },
 
       {

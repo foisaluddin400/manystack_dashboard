@@ -10,6 +10,7 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { TfiMenuAlt } from "react-icons/tfi";
 import { IoSettingsOutline } from "react-icons/io5";
+import { SlSupport } from "react-icons/sl";
 
 const items = [
   {
@@ -56,6 +57,12 @@ const items = [
     label: "Make Admin",
     icon: <LuUserPlus />,
     link: "/dashboard/admin",
+  },
+   {
+    key: "support",
+    label: "Support",
+    icon: <SlSupport />,
+    link: "/dashboard/support",
   },
   {
     key: "settings",
@@ -163,7 +170,7 @@ const SidBar = () => {
             <div key={item.key}>
               <Link
                 to={item.link}
-                className={`menu-item my-4 mx-5 py-3 px-3 flex items-center cursor-pointer ${
+                className={`menu-item my-4 mx-3 py-2 px-3 flex items-center cursor-pointer ${
                   selectedKey === item.key || isSettingsActive || isCreatorActive || isCategoriesActive
                     ? "bg-[#017FF4] text-white rounded-md"
                     : "bg-white rounded-md hover:bg-gray-200"
@@ -207,7 +214,7 @@ const SidBar = () => {
                     <Link
                       key={child.key}
                       to={child.link}
-                      className={`menu-item p-4 flex items-center cursor-pointer ${
+                      className={`menu-item p-2 rounded flex items-center cursor-pointer ${
                         selectedKey === child.key
                           ? "bg-[#017FF4] text-white"
                           : "hover:bg-gray-200"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -11,62 +11,61 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { Select } from "antd";
 import { useGetMetaChartQuery } from "../../page/redux/api/categoryApi";
 
 const UserGrowth = () => {
   const [year, setYear] = useState(2025);
 
-  // API call with year
-  const { data, isLoading } = useGetMetaChartQuery({ year });
+  const { data, isLoading, isError } = useGetMetaChartQuery({ year });
 
-  // API থেকে year list (future proof)
-  const years = data?.data?.year ? [data.data.year] : [];
+  const handleYearChange = (value) => {
+    setYear(value);
+  };
 
-  // 🔹 Transform API data for Recharts
+  // Generate year options (Current year - 3 years)
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 5 }, (_, i) => ({
+    value: currentYear - i,
+    label: (currentYear - i).toString(),
+  }));
+
+  // Transform API data for Bar Chart
   const chartData =
     data?.data?.months?.map((month, index) => ({
       name: month,
       users: data?.data?.userGrowth?.[index] || 0,
     })) || [];
 
-  if (isLoading) {
-    return <p className="p-4">Loading chart...</p>;
-  }
+  if (isLoading) return <div className="p-8 text-center">Loading User Growth Chart...</div>;
+  if (isError) return <div className="p-8 text-center text-red-500">Failed to load chart data</div>;
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      {/* Header */}
-      <div className="flex justify-between items-center p-4">
-        <p className="text-xl font-medium">User Growth</p>
+    <div className=" ">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-semibold text-gray-800">User Growth</h3>
 
-        {/* ✅ Dynamic Select */}
-        <select
+        <Select
           value={year}
-          onChange={(e) => setYear(Number(e.target.value))}
-          className="border rounded-md px-3 py-1 text-sm outline-none"
-        >
-          {years.map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
+          onChange={handleYearChange}
+          style={{ width: 120 }}
+          options={yearOptions}
+        />
       </div>
 
-      {/* Chart */}
-      <div className="w-full h-[400px]">
+      <div className="h-[420px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={chartData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            barSize={35}
+            barSize={36}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="users" fill="#017FF4" />
+            <Bar dataKey="users" fill="#017FF4" name="New Users" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

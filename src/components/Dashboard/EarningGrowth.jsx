@@ -1,98 +1,80 @@
-import { Select } from 'antd';
-import React, { useState } from 'react';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+"use client";
 
-const data = {
-  2024: [
-    { month: 'Jan', value: 100 },
-    { month: 'Feb', value: 150 },
-    { month: 'Mar', value: 200 },
-    { month: 'Apr', value: 250 },
-    { month: 'May', value: 300 },
-    { month: 'Jun', value: 350 },
-    { month: 'Jul', value: 400 },
-    { month: 'Aug', value: 450 },
-    { month: 'Sep', value: 500 },
-    { month: 'Oct', value: 550 },
-    { month: 'Nov', value: 600 },
-    { month: 'Dec', value: 650 },
-  ],
-  2023: [
-    { month: 'Jan', value: 90 },
-    { month: 'Feb', value: 140 },
-    { month: 'Mar', value: 190 },
-    { month: 'Apr', value: 240 },
-    { month: 'May', value: 290 },
-    { month: 'Jun', value: 340 },
-    { month: 'Jul', value: 390 },
-    { month: 'Aug', value: 440 },
-    { month: 'Sep', value: 490 },
-    { month: 'Oct', value: 540 },
-    { month: 'Nov', value: 590 },
-    { month: 'Dec', value: 640 },
-  ],
-  2022: [
-    { month: 'Jan', value: 80 },
-    { month: 'Feb', value: 130 },
-    { month: 'Mar', value: 180 },
-    { month: 'Apr', value: 230 },
-    { month: 'May', value: 280 },
-    { month: 'Jun', value: 330 },
-    { month: 'Jul', value: 380 },
-    { month: 'Aug', value: 430 },
-    { month: 'Sep', value: 480 },
-    { month: 'Oct', value: 530 },
-    { month: 'Nov', value: 580 },
-    { month: 'Dec', value: 630 },
-  ]
-};
+import React, { useState } from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { Select } from "antd";
+import { useGetMetaChartQuery } from "../../page/redux/api/categoryApi";
 
 export const EarningGrowth = () => {
-  const [year, setYear] = useState("2024"); // default selected year
+  const [year, setYear] = useState(2025);
+
+  const { data, isLoading, isError } = useGetMetaChartQuery({ year });
 
   const handleYearChange = (value) => {
-    setYear(value); // updates year when user selects from dropdown
+    setYear(value);
   };
 
-  const items = [
-    { value: '2024', label: '2024' },
-    { value: '2023', label: '2023' },
-    { value: '2022', label: '2022' }
-  ]; // options for Select
+  // Generate year options
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 5 }, (_, i) => ({
+    value: currentYear - i,
+    label: (currentYear - i).toString(),
+  }));
+
+  // Transform API data for Area Chart
+  const chartData =
+    data?.data?.months?.map((month, index) => ({
+      month: month,
+      value: data?.data?.earningGrowth?.[index] || 0,   // Change key if your API uses different name
+    })) || [];
+
+  if (isLoading) return <div className="p-8 text-center">Loading Earning Growth Chart...</div>;
+  if (isError) return <div className="p-8 text-center text-red-500">Failed to load earning data</div>;
 
   return (
-    <div>
-      <div className="flex justify-between p-3">
-        <p className="text-xl font-medium">Earning Growth</p>
+    <div className="">
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-xl font-semibold text-gray-800">Earning Growth</h3>
+
         <Select
           value={year}
           onChange={handleYearChange}
           style={{ width: 120 }}
-          options={items}
+          options={yearOptions}
         />
       </div>
-      
-      <ResponsiveContainer width="95%" height={300}>
-        <AreaChart
-          data={data[year]} 
-          margin={{
-            top: 10,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3" />
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke= 'none'
-            fill="#017FF4"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+
+      <div className="h-[380px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={chartData}
+            margin={{ top: 10, right: 30, left: 20, bottom: 0 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke="#017FF4"
+              strokeWidth={3}
+              fill="#017FF4"
+              fillOpacity={0.2}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
+
+export default EarningGrowth;

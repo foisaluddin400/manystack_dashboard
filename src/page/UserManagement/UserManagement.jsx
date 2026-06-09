@@ -172,7 +172,7 @@ const UserManagement = () => {
               <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border-4 border-white shadow-md">
                 <img
                   src={
-                    `${imageUrl}/${selectedUser.profilePicture}` ||
+                    `${selectedUser.profilePicture}` ||
                     "https://avatar.iran.liara.run/public/24"
                   }
                   alt="Profile"
